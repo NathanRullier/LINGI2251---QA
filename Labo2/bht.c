@@ -60,7 +60,6 @@ static void put(int key, int value) {
       return;
     }
   }
-  assert(0);
 }
 
 // Lookup key in hash table.  The lock serializes the lookups.
@@ -119,7 +118,7 @@ int main(int argc, char *argv[]) {
   assert(pthread_mutex_init(&lock, NULL) == 0);
 
   // Allocate handles for pthread_join() below.
-  tha = malloc(sizeof(pthread_t));
+  tha = malloc(sizeof(pthread_t[nthread]));
 
   // Generate some keys to insert and then lookup again
   srandom(0);
@@ -155,4 +154,6 @@ int main(int argc, char *argv[]) {
   t1 = now();
 
   printf("completion time for get phase = %f\n", t1-t0);
+  
+  free(tha);
 }
