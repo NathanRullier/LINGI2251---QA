@@ -49,6 +49,7 @@ static void print(void) {
 
 // Insert (key, value) pair into hash table.
 static void put(int key, int value) {
+  assert(pthread_mutex_lock(&lock) == 0);
   int b = key % NBUCKET;
   int i;
   // Loop up through the entries in the bucket to find an unused one:
@@ -57,14 +58,15 @@ static void put(int key, int value) {
       table[b][i].key = key;
       table[b][i].value = value;
       table[b][i].inuse = 1;
+      assert(pthread_mutex_unlock(&lock) == 0);
       return;
     }
   }
+  assert(pthread_mutex_unlock(&lock) == 0);
 }
 
 // Lookup key in hash table.  The lock serializes the lookups.
 static int get(int key) {
-  assert(pthread_mutex_lock(&lock) == 0);
   int b = key % NBUCKET;
   int i;
   int v = -1;
@@ -73,9 +75,6 @@ static int get(int key) {
       v = table[b][i].value;
       break;
     }
-  }
-
-  assert(pthread_mutex_unlock(&lock) == 0);
   return v;
 }
 

@@ -1,0 +1,15 @@
+Actually 2 threads looks slower!
+We need to wait for inputs => this making everything slower than just using a single thread
+
+
+(base) [williamglazer@glaze Labo2]$  
+./a.out 1
+completion time for put phase = 3.035559
+0: 0 keys missing
+completion time for get phase = 2.843052
+(base) [williamglazer@glaze Labo2]$  
+./a.out 2
+completion time for put phase = 3.421515
+0: 0 keys missing
+1: 0 keys missing
+completion time for get phase = 2.991107

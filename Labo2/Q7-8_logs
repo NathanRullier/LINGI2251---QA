@@ -1,0 +1,27 @@
+Much more efficient since multi-threading works when only read statements! Only when using writes that change values we can have errors!
+
+
+./a.out 20
+completion time for put phase = 3.611231
+6: 0 keys missing
+1: 0 keys missing
+16: 0 keys missing
+15: 0 keys missing
+2: 0 keys missing
+13: 0 keys missing
+9: 0 keys missing
+19: 0 keys missing
+0: 0 keys missing
+5: 0 keys missing
+3: 0 keys missing
+8: 0 keys missing
+14: 0 keys missing
+17: 0 keys missing
+11: 0 keys missing
+12: 0 keys missing
+18: 0 keys missing
+4: 0 keys missing
+7: 0 keys missing
+10: 0 keys missing
+completion time for get phase = 0.618866
+
