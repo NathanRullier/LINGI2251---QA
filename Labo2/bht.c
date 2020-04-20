@@ -25,8 +25,8 @@ int keys[NKEYS];
 int nthread = 1;
 volatile int done;
 
-// The lock that serializes get()'s.
-pthread_mutex_t lock;
+// The lock that serializes put()'s.
+pthread_mutex_t* lock;
 
 double now() {
  struct timeval tv;
@@ -49,20 +49,20 @@ static void print(void) {
 
 // Insert (key, value) pair into hash table.
 static void put(int key, int value) {
-  assert(pthread_mutex_lock(&lock) == 0);
   int b = key % NBUCKET;
   int i;
   // Loop up through the entries in the bucket to find an unused one:
+  assert(pthread_mutex_lock(&lock[b]) == 0);
   for (i = 0; i < NENTRY; i++) {
     if (!table[b][i].inuse) {
       table[b][i].key = key;
       table[b][i].value = value;
       table[b][i].inuse = 1;
-      assert(pthread_mutex_unlock(&lock) == 0);
+      assert(pthread_mutex_unlock(&lock[b]) == 0);
       return;
     }
   }
-  assert(pthread_mutex_unlock(&lock) == 0);
+  assert(pthread_mutex_unlock(&lock[b]) == 0);
 }
 
 // Lookup key in hash table.  The lock serializes the lookups.
@@ -75,6 +75,7 @@ static int get(int key) {
       v = table[b][i].value;
       break;
     }
+  }
   return v;
 }
 
@@ -113,9 +114,12 @@ int main(int argc, char *argv[]) {
   }
   nthread = atoi(argv[1]);
 
-  // Initialize lock
-  assert(pthread_mutex_init(&lock, NULL) == 0);
-
+  // Initialize locks and init memory
+  lock = malloc(sizeof(pthread_mutex_t[NBUCKET]));
+  for (i = 0; i < NBUCKET; i++) {
+	assert(pthread_mutex_init(&lock[i], NULL) == 0);
+  }
+  
   // Allocate handles for pthread_join() below.
   tha = malloc(sizeof(pthread_t[nthread]));
 
