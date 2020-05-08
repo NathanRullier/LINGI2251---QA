@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./jpf-core-master/bin/jpf ./jpf-core-master/daisy.jpf

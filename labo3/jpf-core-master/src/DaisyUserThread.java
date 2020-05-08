@@ -17,12 +17,13 @@ public class DaisyUserThread extends Thread {
 	private int iterations;
 	
 	public static final int MAX_OPERATIONS = 6;
+	public static final int RND_OPERATIONS = 5;
 	public static final int READ_OPERATION = 0;
 	public static final int WRITE_OPERATION = 1;
 	public static final int CREATE_OPERATION = 2;
-	public static final int DELETE_OPERATION = 3;
+	public static final int DELETE_OPERATION = 5;
 	public static final int SET_ATTR_OPERATION = 4;
-	public static final int GET_ATTR_OPERATION = 5;
+	public static final int GET_ATTR_OPERATION = 3;
 	public static final int RANDOM_OPERATION = -1;
 	
 	public static final int MAX_FILE_SIZE = 9;
@@ -62,7 +63,7 @@ public class DaisyUserThread extends Thread {
 			
 			int operation;
 			if(opCode == RANDOM_OPERATION) {
-				operation = random.nextInt(MAX_OPERATIONS);
+				operation = random.nextInt(RND_OPERATIONS);
 			} else {
 				operation = opCode;
 			}
